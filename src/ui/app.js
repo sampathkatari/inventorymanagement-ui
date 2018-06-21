@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Container } from 'semantic-ui-react';
+import AppHeader from './header';
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -6,8 +9,10 @@ class App extends Component {
     render() {
         return (
             <div>
-                <h1>Inventory Management</h1>
-                {this.props.children}
+                <AppHeader />
+                <Container className='sticky'>
+                    {this.props.children}
+                </Container>
             </div>
         )
     }
