@@ -9,8 +9,8 @@ class App extends Component {
     render() {
         return (
             <div>
-                <AppHeader />
                 <Container className='sticky'>
+                    <AppHeader />
                     {this.props.children}
                 </Container>
             </div>

@@ -1,10 +1,16 @@
 import { combineReducers } from 'redux';
 import { supplier } from './supplier';
+import { brand } from './brand';
+import { product } from './product';
 
 export * from './supplier';
+export * from './brand';
+export * from './product';
 
 const appReducer = combineReducers({
-    supplier
+    supplier,
+    brand,
+    product
 })
 
 const reducer = (state, action) => {
