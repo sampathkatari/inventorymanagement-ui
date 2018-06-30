@@ -34,8 +34,8 @@ export class SupplierDetails extends Component {
         this.props.createSupplierProduct({
             supplierId: parseInt(this.props.params.supplierId),
             productId: this.state.productId,
-            quantity: this.state.quantity
-
+            quantity: this.state.quantity,
+            price: this.state.price
         }, this.successCallback.bind(this))
     }
     successCallback() {
@@ -73,6 +73,10 @@ export class SupplierDetails extends Component {
                             <Form.Field>
                                 <label>Quantity</label>
                                 <input name='quantity' value={this.state.quantity || ''} onChange={this.handleInputChange.bind(this)}/>
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Price per Item</label>
+                                <input name='price' value={this.state.price || ''} onChange={this.handleInputChange.bind(this)}/>
                             </Form.Field>
                         </Form>
                     </Modal.Content>

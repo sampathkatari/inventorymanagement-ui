@@ -14,7 +14,6 @@ export default class BrandList extends Component {
                     <Table.Row>
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Created On</Table.HeaderCell>
-                        <Table.HeaderCell>Details</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>

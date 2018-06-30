@@ -2,15 +2,18 @@ import { combineReducers } from 'redux';
 import { supplier } from './supplier';
 import { brand } from './brand';
 import { product } from './product';
+import { dashboard } from './dashboard';
 
 export * from './supplier';
 export * from './brand';
 export * from './product';
+export * from './dashboard'
 
 const appReducer = combineReducers({
     supplier,
     brand,
-    product
+    product,
+    dashboard
 })
 
 const reducer = (state, action) => {

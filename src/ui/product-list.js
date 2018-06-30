@@ -14,13 +14,12 @@ export default class ProductList extends Component {
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Brand</Table.HeaderCell>
                         <Table.HeaderCell>Created On</Table.HeaderCell>
-                        <Table.HeaderCell>Details</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
                         this.props.list.map(item => {
-                            return <ProductListItem item={item} key={item.key}/>
+                            return <ProductListItem item={item} key={item.id}/>
                         })
                     } 
                 </Table.Body>

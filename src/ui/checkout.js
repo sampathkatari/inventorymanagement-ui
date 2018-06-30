@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Header, Form, Dropdown, Button } from 'semantic-ui-react';
+import { hashHistory } from 'react-router';
 import { getProducts, getSuppliers, getSupplierProducts, checkout } from '../redux/modules';
 
 export class Checkout extends Component {
@@ -23,8 +24,10 @@ export class Checkout extends Component {
         console.log(selectedSupplierProduct)
         this.setState({ productId: data.value, availableQuantity: selectedSupplierProduct[0].quantity, supplierProductId: selectedSupplierProduct[0].id });
     }
-    checkout() {
+    checkout(evt) {
+        evt.preventDefault();
         this.props.checkout(this.state.supplierId, { selectedSupplierProductId: this.state.supplierProductId, quantity: this.state.quantity }, this.resetState.bind(this));
+        hashHistory.push('/dashboard')
     }
     resetState() {
         this.setState({ })
@@ -79,6 +82,7 @@ export class Checkout extends Component {
                                     <label>Quantity</label>
                                     <input name='quantity' value={this.state.quantity} onChange={this.handleQuantityChange.bind(this)}/>
                                 </Form.Field>
+                                <br />
                                 <Button onClick={this.checkout.bind(this)}>Checkout</Button>
                             </div>
                         )

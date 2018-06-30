@@ -13,7 +13,7 @@ export default class SupplierProductList extends Component {
                     <Table.Row>
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Quantity</Table.HeaderCell>
-                        <Table.HeaderCell>Details</Table.HeaderCell>
+                        <Table.HeaderCell>Price per Item</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>

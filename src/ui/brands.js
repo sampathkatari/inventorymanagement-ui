@@ -8,7 +8,8 @@ export class Brands extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            addModal: false
+            addModal: false,
+            error: false
         }
     }
     componentDidMount() {
@@ -20,8 +21,13 @@ export class Brands extends Component {
     closeAddModal() {
         this.setState({ addModal: false });
     }
-    handleInputChange(evt) {
-        this.setState({ [evt.target.name]: evt.target.value });
+    handleNameChange(evt) {
+        const { list } = this.props.brand;
+        const value = evt.target.value;
+        const existing = list.filter(brand => {
+            return brand.name === value
+        });
+        this.setState({ name: value, error: existing.length > 0 });
     }
     addBrand() {
         console.log(this.state)
@@ -46,13 +52,19 @@ export class Brands extends Component {
                         <Form>
                             <Form.Field>
                                 <label>Name</label>
-                                <input name='name' value={this.state.name || ''} onChange={this.handleInputChange.bind(this)}/>
+                                <input name='name' value={this.state.name || ''} onChange={this.handleNameChange.bind(this)}/>
                             </Form.Field>
                         </Form>
+                        {
+                            this.state.error === true && 
+                            <label>
+                                This brand already exists
+                            </label>
+                        }
                     </Modal.Content>
                     <Modal.Actions>
                         <Button negative onClick={this.closeAddModal.bind(this)}>Cancel</Button>
-                        <Button positive icon='checkmark' labelPosition='right' content='Add Supplier' onClick={this.addBrand.bind(this)}/>
+                        <Button positive icon='checkmark' labelPosition='right' content='Add Brand' disabled={this.state.error} onClick={this.addBrand.bind(this)}/>
                     </Modal.Actions>
                 </Modal>
             </div>

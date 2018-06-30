@@ -8,7 +8,8 @@ export class Products extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            addModal: false
+            addModal: false,
+            error: false
         }
     }
     componentDidMount() {
@@ -23,8 +24,13 @@ export class Products extends Component {
     closeAddModal() {
         this.setState({ addModal: false });
     }
-    handleInputChange(evt) {
-        this.setState({ [evt.target.name]: evt.target.value });
+    handleNameChange(evt) {
+        const { list } = this.props.product;
+        const value = evt.target.value;
+        const existing = list.filter(product => {
+            return product.name === value
+        });
+        this.setState({ name: value, error: existing.length > 0 });
     }
     addProduct() {
         console.log(this.state)
@@ -60,17 +66,23 @@ export class Products extends Component {
                         <Form>
                             <Form.Field>
                                 <label>Name</label>
-                                <input name='name' value={this.state.name || ''} onChange={this.handleInputChange.bind(this)}/>
+                                <input name='name' value={this.state.name || ''} onChange={this.handleNameChange.bind(this)}/>
                             </Form.Field>
                             <Form.Field>
                                 <label>Address</label>
                                 <Dropdown placeholder='Brand' search selection options={stateOptions} onChange={this.onBrandChange.bind(this)}/>
                             </Form.Field>
                         </Form>
+                        {
+                            this.state.error === true && 
+                            <label>
+                                This brand already exists
+                            </label>
+                        }
                     </Modal.Content>
                     <Modal.Actions>
                         <Button negative onClick={this.closeAddModal.bind(this)}>Cancel</Button>
-                        <Button positive icon='checkmark' labelPosition='right' content='Add Product' onClick={this.addProduct.bind(this)}/>
+                        <Button positive icon='checkmark' labelPosition='right' content='Add Product'  disabled={this.state.error} onClick={this.addProduct.bind(this)}/>
                     </Modal.Actions>
                 </Modal>
             </div>

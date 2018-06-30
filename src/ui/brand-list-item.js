@@ -11,7 +11,6 @@ export default class BrandListItem extends Component {
             <Table.Row>
                 <Table.Cell>{item.name}</Table.Cell>
                 <Table.Cell>{`${item.createdOn.dayOfMonth}-${item.createdOn.monthValue}-${item.createdOn.year}`}</Table.Cell>
-                <Table.Cell><Button>View Details</Button></Table.Cell>
             </Table.Row>
         )
     }
