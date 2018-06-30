@@ -9,23 +9,30 @@ import Login from '../ui/login';
 import Dashboard from '../ui/dashboard';
 import SupplierDetails from '../ui/supplier-details';
 import Checkout from '../ui/checkout';
-
+import { ping } from '../redux/modules';
+import { connect } from 'react-redux';
 class InventoryManagementRouter extends Component {
+    constructor(props) {
+        super(props)
+    }
+    checkSession() {
+        this.props.ping();
+    }
     render() {
         return (
             <Router history={hashHistory}>
                 <Route path="/" component={App}>
                     <IndexRoute component={Login}/>
-                    <Route path='/dashboard'>
+                    <Route path='/dashboard' onEnter={this.checkSession.bind(this)}>
                         <IndexRoute component={Dashboard}/>
-                        <Route path="/dashboard/home" component={Home}/>
+                        <Route path="/dashboard/home" component={Home} onEnter={this.checkSession.bind(this)}/>
                         <Route path="/dashboard/suppliers">
-                        <IndexRoute component={Suppliers} />
-                            <Route path="/dashboard/suppliers/:supplierId" component={SupplierDetails}/>
+                        <IndexRoute component={Suppliers} onEnter={this.checkSession.bind(this)}/>
+                            <Route path="/dashboard/suppliers/:supplierId" component={SupplierDetails} onEnter={this.checkSession.bind(this)}/>
                         </Route>
-                        <Route path="/dashboard/brands" component={Brands}/>
-                        <Route path="/dashboard/products" component={Products}/>
-                        <Route path="/dashboard/checkout" component={Checkout} />
+                        <Route path="/dashboard/brands" component={Brands} onEnter={this.checkSession.bind(this)}/>
+                        <Route path="/dashboard/products" component={Products} onEnter={this.checkSession.bind(this)}/>
+                        <Route path="/dashboard/checkout" component={Checkout} onEnter={this.checkSession.bind(this)}/>
                     </Route>
                 </Route>
             </Router>
@@ -33,5 +40,17 @@ class InventoryManagementRouter extends Component {
     }
 }
 
-export default InventoryManagementRouter;
+const mapStateToProps = (state) => {
+    return {
+        
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+        ping: () => dispatch(ping())
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(InventoryManagementRouter);
 

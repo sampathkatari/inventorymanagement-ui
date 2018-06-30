@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 import { hashHistory } from 'react-router'
-export default class AppHeader extends Component {
+import { logout } from '../redux/modules';
+import { connect } from 'react-redux';
+export class AppHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,6 +15,9 @@ export default class AppHeader extends Component {
         this.setState({ activeItem: name })
         if(name === 'dashboard') {
           hashHistory.push(`/dashboard`)
+        } else if (name === 'logout') {
+          this.props.logout();
+          hashHistory.push('/dashboard')
         } else {
           hashHistory.push(`/dashboard/${name}`)
         }
@@ -53,3 +58,17 @@ export default class AppHeader extends Component {
         )
     }
 } 
+
+const mapStateToProps = (state) => {
+  return {
+      
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      logout: () => dispatch(logout())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);
