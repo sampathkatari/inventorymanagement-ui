@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Header, Modal, Button, Dropdown } from 'semantic-ui-react';
+import { Form, Header, Modal, Button, Dropdown, Label } from 'semantic-ui-react';
 import SupplierList from './supplier-list';
 import { connect } from 'react-redux';
 import { getProducts, getBrands, createSupplier, getSuppliers, getSupplierProducts, createSupplierProducts, createSupplierProduct } from '../redux/modules';
@@ -9,7 +9,8 @@ export class SupplierDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            addProductsModal: false
+            addProductsModal: false,
+            disableButton: true
         }
     }
     componentDidMount() {
@@ -21,13 +22,29 @@ export class SupplierDetails extends Component {
         this.setState({ addProductsModal: true })
     }
     closeAddProductModal() {
-        this.setState({ addProductsModal: false });
+        this.setState({ addProductsModal: false, disableButton: true, supplierId: '', productId: '', quantity: 0 });
     }
     handleInputChange(evt) {
-        this.setState({ [evt.target.name]: evt.target.value });
+        const state = Object.assign({}, this.state, { [evt.target.name]: evt.target.value })
+        this.setState(state);
+        this.validate(state);
     }
     onProductChange(evt, data) {
-        this.setState({ productId: data.value });
+        const state = Object.assign({}, this.state, { productId: data.value })
+        this.setState(state);
+        this.validate(state);
+    }
+    validate(state) {
+        const { productId, quantity, price } = state;
+        if(!productId || !quantity || !price) {
+            this.setState({ disableButton: true });
+        } else if(parseInt(quantity) < 25) {
+            this.setState({ disableButton: true, error: 'Quantity should not be less than 25'})
+        } else if(parseFloat(price) <= 0) {
+            this.setState({ disableButton: true, error: 'Enter a valid price'})
+        } else {
+            this.setState({ disableButton: false, error: '' });
+        }
     }
     addSupplierProduct() {
         console.log(this.state)
@@ -49,7 +66,10 @@ export class SupplierDetails extends Component {
         const supplierDetail = this.props.supplier.list.filter(supplier => {
             return supplier.id === parseInt(this.props.params.supplierId)
         }) || [{}];
-        const productOptions = this.props.product.list.map(product => {
+        const existingProductIds = this.props.supplier.supplierProducts.map(supplierProduct => supplierProduct.product.id )
+        const productOptions = this.props.product.list
+        .filter(product => !existingProductIds.includes(product.id))
+        .map(product => {
             return {
                 key: product.id,
                 value: product.id,
@@ -67,22 +87,25 @@ export class SupplierDetails extends Component {
                     <Modal.Content>
                         <Form>
                             <Form.Field>
-                                <label>Product</label>
-                                <Dropdown placeholder='Product' search selection options={productOptions} onChange={this.onProductChange.bind(this)}/>
+                                <label>Product<sup>*</sup></label>
+                                <Dropdown placeholder='Product' search selection options={productOptions} onChange={this.onProductChange.bind(this)}
+                                noResultsMessage='No more products to add.'/>
                             </Form.Field>
                             <Form.Field>
-                                <label>Quantity</label>
+                                <label>Quantity<sup>*</sup>(Minimum quantity is 25)</label>
                                 <input name='quantity' value={this.state.quantity || ''} onChange={this.handleInputChange.bind(this)}/>
                             </Form.Field>
                             <Form.Field>
-                                <label>Price per Item</label>
+                                <label>Price per Item<sup>*</sup></label>
                                 <input name='price' value={this.state.price || ''} onChange={this.handleInputChange.bind(this)}/>
                             </Form.Field>
                         </Form>
+                        <span><sup>*</sup> Please fill the mandatory fileds</span><br />
+                        { this.state.error && <Label basic color='red'>{this.state.error}</Label>}
                     </Modal.Content>
                     <Modal.Actions>
                         <Button negative onClick={this.closeAddProductModal.bind(this)}>Cancel</Button>
-                        <Button positive icon='checkmark' labelPosition='right' content='Add Supplier' onClick={this.addSupplierProduct.bind(this)}/>
+                        <Button disabled={this.state.disableButton} positive icon='checkmark' labelPosition='right' content='Add Supplier' onClick={this.addSupplierProduct.bind(this)}/>
                     </Modal.Actions>
                 </Modal>
             </div>

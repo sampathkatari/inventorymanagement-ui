@@ -30,7 +30,7 @@ export const getSuppliers = () => {
     }
 }
 
-export const createSupplier = (product, callback) => {
+export const createSupplier = (product, callback, errCallback) => {
     return (dispatch, state) => {
         let fetchOptions = {
             method: 'POST',
@@ -44,8 +44,12 @@ export const createSupplier = (product, callback) => {
         }
         fetch(`${API_URL}supplier`, fetchOptions)
         .then(response => {
-            dispatch(getSuppliers())  
-            callback()
+            if(response.status === 400) {
+                errCallback();
+            } else {
+                dispatch(getSuppliers())
+                callback()
+            }
         })
     }
 }

@@ -83,7 +83,7 @@ export class Checkout extends Component {
                                     <input name='quantity' value={this.state.quantity} onChange={this.handleQuantityChange.bind(this)}/>
                                 </Form.Field>
                                 <br />
-                                <Button onClick={this.checkout.bind(this)}>Checkout</Button>
+                                <Button primary disabled={!this.state.quantity || this.state.quantity === 0} onClick={this.checkout.bind(this)}>Checkout</Button>
                             </div>
                         )
                     }

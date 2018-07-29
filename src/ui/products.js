@@ -65,11 +65,11 @@ export class Products extends Component {
                     <Modal.Content>
                         <Form>
                             <Form.Field>
-                                <label>Name</label>
+                                <label>Name<sup>*</sup></label>
                                 <input name='name' value={this.state.name || ''} onChange={this.handleNameChange.bind(this)}/>
                             </Form.Field>
                             <Form.Field>
-                                <label>Address</label>
+                                <label>Brand<sup>*</sup></label>
                                 <Dropdown placeholder='Brand' search selection options={stateOptions} onChange={this.onBrandChange.bind(this)}/>
                             </Form.Field>
                         </Form>
@@ -79,10 +79,11 @@ export class Products extends Component {
                                 This brand already exists
                             </label>
                         }
+                        <span><sup>*</sup> Please fill the mandatory fileds</span>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button negative onClick={this.closeAddModal.bind(this)}>Cancel</Button>
-                        <Button positive icon='checkmark' labelPosition='right' content='Add Product'  disabled={this.state.error} onClick={this.addProduct.bind(this)}/>
+                        <Button positive icon='checkmark' labelPosition='right' content='Add Product'  disabled={!this.state.name || !this.state.brandId} onClick={this.addProduct.bind(this)}/>
                     </Modal.Actions>
                 </Modal>
             </div>

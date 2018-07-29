@@ -51,7 +51,7 @@ export class Brands extends Component {
                     <Modal.Content>
                         <Form>
                             <Form.Field>
-                                <label>Name</label>
+                                <label>Name<sup>*</sup></label>
                                 <input name='name' value={this.state.name || ''} onChange={this.handleNameChange.bind(this)}/>
                             </Form.Field>
                         </Form>
@@ -61,10 +61,11 @@ export class Brands extends Component {
                                 This brand already exists
                             </label>
                         }
+                        <span><sup>*</sup> Please fill the mandatory fileds</span>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button negative onClick={this.closeAddModal.bind(this)}>Cancel</Button>
-                        <Button positive icon='checkmark' labelPosition='right' content='Add Brand' disabled={this.state.error} onClick={this.addBrand.bind(this)}/>
+                        <Button positive icon='checkmark' labelPosition='right' content='Add Brand' disabled={!this.state.name} onClick={this.addBrand.bind(this)}/>
                     </Modal.Actions>
                 </Modal>
             </div>

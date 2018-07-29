@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Header, Modal, Button } from 'semantic-ui-react';
+import { Form, Header, Modal, Button, Label } from 'semantic-ui-react';
 import SupplierList from './supplier-list';
 import { connect } from 'react-redux';
 import { getProducts, getBrands, createSupplier, getSuppliers } from '../redux/modules';
@@ -8,7 +8,8 @@ export class Suppliers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            addModal: false
+            addModal: false,
+            buttonDisabled: true
         }
     }
     componentDidMount() {
@@ -21,7 +22,23 @@ export class Suppliers extends Component {
         this.setState({ addModal: false });
     }
     handleInputChange(evt) {
-        this.setState({ [evt.target.name]: evt.target.value });
+        const state = Object.assign({}, this.state, { [evt.target.name]: evt.target.value });
+        this.setState(state);
+        this.validate(state)
+    }
+    isValidEmail(email) {
+        let pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return pattern.test(email);
+    }
+    validate(state) {
+        const { name, email, address } = state;
+        if(!name || !email || !address || name === '' || email === '' || address === '' ) {
+            this.setState({ buttonDisabled: true, error: 'Please enter all the mandatory fields' })
+        } else if(!this.isValidEmail(email)) {
+            this.setState({ buttonDisabled: true, error: 'Please enter a valid email' })
+        } else {
+            this.setState({ buttonDisabled: false, error: undefined })
+        }
     }
     addSupplier() {
         console.log(this.state)
@@ -29,13 +46,14 @@ export class Suppliers extends Component {
             name: this.state.name,
             email: this.state.email,
             address: this.state.address
-        }, this.successCallback.bind(this))
+        }, this.successCallback.bind(this),
+        this.errorCallback.bind(this))
     }
     successCallback() {
-        this.setState({ addModal: false, email: '', name: '', address: '' })
+        this.setState({ addModal: false, email: '', name: '', address: '', error: undefined, buttonDisabled: true })
     }
     errorCallback() {
-
+        this.setState({ error: 'Supplier with this name already exists' });
     }
     render() {
         const { list } =this.props.supplier;
@@ -49,22 +67,29 @@ export class Suppliers extends Component {
                     <Modal.Content>
                         <Form>
                             <Form.Field>
-                                <label>Name</label>
+                                <label>Name<sup>*</sup></label>
                                 <input name='name' value={this.state.name || ''} onChange={this.handleInputChange.bind(this)}/>
                             </Form.Field>
                             <Form.Field>
-                                <label>Email</label>
+                                <label>Email<sup>*</sup></label>
                                 <input type='email' name='email' value={this.state.email || ''} onChange={this.handleInputChange.bind(this)}/>
                             </Form.Field>
                             <Form.Field>
-                                <label>Address</label>
+                                <label>Address<sup>*</sup></label>
                                 <input name='address' value={this.state.address || ''} onChange={this.handleInputChange.bind(this)}/>
                             </Form.Field>
+                            <span><sup>*</sup> Please fill all the mandatory fields</span><br />
+                            { this.state.error && <Label basic color='red'>{this.state.error}</Label> }
                         </Form>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button negative onClick={this.closeAddModal.bind(this)}>Cancel</Button>
-                        <Button positive icon='checkmark' labelPosition='right' content='Add Supplier' onClick={this.addSupplier.bind(this)}/>
+                        <Button positive 
+                            icon='checkmark'
+                            labelPosition='right'
+                            content='Add Supplier'
+                            onClick={this.addSupplier.bind(this)}
+                            disabled={this.state.buttonDisabled}/>
                     </Modal.Actions>
                 </Modal>
             </div>
@@ -85,7 +110,7 @@ const mapDispatchToProps = (dispatch) => {
         getProducts: () => dispatch(getProducts()),
         getBrands: () => dispatch(getBrands()),
         getSuppliers: () => dispatch(getSuppliers()),
-        createSupplier: (supplier, callback) => dispatch(createSupplier(supplier, callback)),
+        createSupplier: (supplier, callback, errCallback) => dispatch(createSupplier(supplier, callback, errCallback)),
     }
 }
 
