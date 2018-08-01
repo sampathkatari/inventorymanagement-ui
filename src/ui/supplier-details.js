@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Header, Modal, Button, Dropdown, Label } from 'semantic-ui-react';
 import SupplierList from './supplier-list';
 import { connect } from 'react-redux';
-import { getProducts, getBrands, createSupplier, getSuppliers, getSupplierProducts, createSupplierProducts, createSupplierProduct } from '../redux/modules';
+import { getProducts, getBrands, createSupplier, getSuppliers, getSupplierProducts, createSupplierProducts, createSupplierProduct, updateQuantity } from '../redux/modules';
 import SupplierProductList from './supplier-product-list';
 
 export class SupplierDetails extends Component {
@@ -58,8 +58,8 @@ export class SupplierDetails extends Component {
     successCallback() {
         this.setState({ addProductsModal: false, supplierId: '', productId: '', quantity: 0 })
     }
-    errorCallback() {
-
+    updateQuantity(supplierProductId, body) {
+        this.props.updateQuantity(parseInt(this.props.params.supplierId), supplierProductId, body)
     }
     render() {
         console.log(this.props)
@@ -81,7 +81,8 @@ export class SupplierDetails extends Component {
                 <Header>{supplierDetail.length > 0 ? supplierDetail[0].name : ''}</Header>
                 <Button primary onClick={this.openAddProductModal.bind(this)}>Add Products To Supplier</Button>
 
-                <SupplierProductList list={this.props.supplier.supplierProducts}/>
+                <SupplierProductList list={this.props.supplier.supplierProducts}
+                updateQuantity={this.updateQuantity.bind(this)}/>
                 <Modal open={this.state.addProductsModal} size='small' onClose={this.closeAddProductModal.bind(this)}>
                     <Modal.Header>Add Products To Supplier</Modal.Header>
                     <Modal.Content>
@@ -126,7 +127,8 @@ const mapDispatchToProps = (dispatch) => {
         getBrands: () => dispatch(getBrands()),
         getSuppliers: () => dispatch(getSuppliers()),
         getSupplierProducts: (supplierId) => dispatch(getSupplierProducts(supplierId)),
-        createSupplierProduct: (supplierProduct, callback) => dispatch(createSupplierProduct(supplierProduct, callback))
+        createSupplierProduct: (supplierProduct, callback) => dispatch(createSupplierProduct(supplierProduct, callback)),
+        updateQuantity: (supplierId, supplierProductId, data) => dispatch(updateQuantity(supplierId, supplierProductId, data))
     }
 }
 

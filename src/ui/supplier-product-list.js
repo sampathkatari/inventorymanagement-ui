@@ -20,7 +20,7 @@ export default class SupplierProductList extends Component {
                     {
                         this.props.list.map(item => {
                             return (
-                                <SupplierProductListItem item={item} key={item.id}/>
+                                <SupplierProductListItem {...this.props} item={item} key={item.id}/>
                             )
                         })
                     }

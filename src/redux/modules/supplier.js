@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { API_URL } from '../../config';
+import { getStats } from './dashboard';
 
 const initialState = {
     list: [],
@@ -110,9 +111,32 @@ export const checkout = (supplierId, data, callback) => {
         fetch(`${API_URL}supplier/${supplierId}/products/checkout`, fetchOptions)
         .then(response => {
             callback();
+            dispatch(getStats())
         })
     }
 }
+
+export const updateQuantity = (supplierId, supplierProductId, data) => {
+    return (dispatch, state) => {
+        let fetchOptions = {
+            method: 'PUT',
+            credentials: 'include',
+            mode: 'cors',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }),
+            body: JSON.stringify(data)
+        }
+        fetch(`${API_URL}supplier/${supplierId}/products/${supplierProductId}`, fetchOptions)
+        .then(response => {
+            dispatch(getSupplierProducts(supplierId))
+            dispatch(getStats())
+        })
+    }
+}
+
+
 
 export function supplier(supplier = initialState, action) {
     switch(action.type) {

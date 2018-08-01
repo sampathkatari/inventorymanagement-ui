@@ -31,13 +31,13 @@ export class Brands extends Component {
     }
     addBrand() {
         console.log(this.state)
-        this.props.createBrand({name: this.state.name}, this.successCallback.bind(this))
+        this.props.createBrand({name: this.state.name}, this.successCallback.bind(this), this.errorCallback.bind(this))
     }
     successCallback() {
         this.setState({ addModal: false, name: '' })
     }
     errorCallback() {
-
+        this.setState({ error: true });
     }
     render() {
         const { list } = this.props.brand;
@@ -55,13 +55,13 @@ export class Brands extends Component {
                                 <input name='name' value={this.state.name || ''} onChange={this.handleNameChange.bind(this)}/>
                             </Form.Field>
                         </Form>
+                        <span><sup>*</sup> Please fill the mandatory fileds</span><br />
                         {
                             this.state.error === true && 
                             <label>
                                 This brand already exists
                             </label>
                         }
-                        <span><sup>*</sup> Please fill the mandatory fileds</span>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button negative onClick={this.closeAddModal.bind(this)}>Cancel</Button>
@@ -82,7 +82,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getBrands: () => dispatch(getBrands()),
-        createBrand: (brand, callback) => dispatch(createBrand(brand, callback))
+        createBrand: (brand, callback, errCallback) => dispatch(createBrand(brand, callback, errCallback))
     }
 }
 

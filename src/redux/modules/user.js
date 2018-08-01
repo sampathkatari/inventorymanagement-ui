@@ -7,6 +7,7 @@ const initialState = {
 };
 
 const LOGIN = 'LOGIN';
+const LOGOUT = 'LOGOUT';
 
 export const login = (user, errorCallback) => {
     return (dispatch, state) => {
@@ -46,6 +47,7 @@ export const logout = () => {
         fetch(`${API_URL}user/logout`, fetchOptions)
         .then(response => {
             hashHistory.push('/')
+            dispatch({ type: LOGOUT });
         })
     }
 }
@@ -67,7 +69,13 @@ export const ping = () => {
             if(response.status == 401) {
                 hashHistory.push('/')
             }
+            return response.json();
         })
+        .then(response => {
+            console.log(response)
+                dispatch({ type: LOGIN, username: response.username })
+            }
+        )
     }
 }
 
@@ -76,6 +84,10 @@ export function user(user = initialState, action) {
         case LOGIN:
             return {
                 user: action.username
+            }
+        case LOGOUT:
+            return {
+                user: ''
             }
         default:
             return user;

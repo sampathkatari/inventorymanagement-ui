@@ -33,6 +33,10 @@ export class Checkout extends Component {
         this.setState({ })
     }
     handleQuantityChange(evt) {
+        if(evt.target.value <= 0) {
+            alert('You cannot enter 0 or a negative value')
+            return;
+        }
         if(evt.target.value > this.state.availableQuantity) {
             alert('You cannot enter a value greater than the available quantity')
             return;
@@ -80,7 +84,7 @@ export class Checkout extends Component {
                                 Available Quantity: {this.state.availableQuantity} units
                                 <Form.Field>
                                     <label>Quantity</label>
-                                    <input name='quantity' value={this.state.quantity} onChange={this.handleQuantityChange.bind(this)}/>
+                                    <input name='quantity' type='number' value={this.state.quantity} onChange={this.handleQuantityChange.bind(this)}/>
                                 </Form.Field>
                                 <br />
                                 <Button primary disabled={!this.state.quantity || this.state.quantity === 0} onClick={this.checkout.bind(this)}>Checkout</Button>

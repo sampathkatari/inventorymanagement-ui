@@ -23,6 +23,8 @@ export class AppHeader extends Component {
         }
     }
     render() {
+        const { user: { user } } = this.props;
+        console.log(this.props, user);
         const { activeItem } = this.state;
         return (
             <Menu pointing secondary>
@@ -47,13 +49,16 @@ export class AppHeader extends Component {
             active={activeItem === 'checkout'}
             onClick={this.handleItemClick}
           />
-          <Menu.Menu position='right'>
-            <Menu.Item
-              name='logout'
-              active={activeItem === 'logout'}
-              onClick={this.handleItemClick}
-            />
-          </Menu.Menu>
+          {
+            user && user !== '' &&
+            <Menu.Menu position='right'>
+              <Menu.Item
+                name='logout'
+                active={activeItem === 'logout'}
+                onClick={this.handleItemClick}
+              />
+            </Menu.Menu>
+          }
         </Menu>
         )
     }
@@ -61,7 +66,7 @@ export class AppHeader extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      
+      user: state.user
   }
 }
 

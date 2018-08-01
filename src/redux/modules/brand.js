@@ -28,7 +28,7 @@ export const getBrands = () => {
     }
 }
 
-export const createBrand = (brand, callback) => {
+export const createBrand = (brand, callback, errCallback) => {
     return (dispatch, state) => {
         let fetchOptions = {
             method: 'POST',
@@ -42,11 +42,12 @@ export const createBrand = (brand, callback) => {
         }
         fetch(`${API_URL}brand`, fetchOptions)
         .then(response => {
-            return response.json()
-        })
-        .then(response => {
-            dispatch(getBrands())  
-            callback()
+            if(response.status === 400) {
+                errCallback();
+            } else {
+                callback()
+                dispatch(getBrands())
+            }
         })
     }
 }
