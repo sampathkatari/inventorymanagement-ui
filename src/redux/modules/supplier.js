@@ -112,6 +112,7 @@ export const checkout = (supplierId, data, callback) => {
         .then(response => {
             callback();
             dispatch(getStats())
+            dispatch(getSupplierProducts(supplierId))
         })
     }
 }

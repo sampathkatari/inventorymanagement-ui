@@ -22,6 +22,10 @@ export default class SupplierProductListItem extends Component {
         })
     }
     onQuantityChange(evt) {
+        if(evt.target.value <= 0) {
+            alert('You cannot enter 0 or a negative value')
+            return;
+        }
         this.setState({
             quantity: evt.target.value
         })
@@ -34,7 +38,7 @@ export default class SupplierProductListItem extends Component {
                 <Table.Cell>
                     {
                         this.state.edit ? 
-                        (<span><input name='quantity' value={this.state.quantity} onChange={this.onQuantityChange.bind(this)}/><Button floated='right' onClick={this.onSave.bind(this)}>Save</Button></span>)
+                        (<span><input name='quantity' type='number' value={this.state.quantity} onChange={this.onQuantityChange.bind(this)}/><Button floated='right' onClick={this.onSave.bind(this)}>Save</Button></span>)
                         : (
                             <span>{this.state.quantity} <Button floated='right' onClick={this.onUpdateQuantity.bind(this)}>Update Quantity</Button></span>
                         )
