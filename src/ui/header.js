@@ -49,6 +49,11 @@ export class AppHeader extends Component {
             active={activeItem === 'checkout'}
             onClick={this.handleItemClick}
           />
+          <Menu.Item
+            name='report'
+            active={activeItem === 'report'}
+            onClick={this.handleItemClick}
+          />
           {
             user && user !== '' &&
             <Menu.Menu position='right'>

@@ -4,11 +4,13 @@ import { getStats } from './dashboard';
 
 const initialState = {
     list: [],
-    supplierProducts: []
+    supplierProducts: [],
+    reports: []
 };
 
 const GET_SUPPLIERS = 'GET_SUPPLIERS';
 const GET_SUPPLIER_PRODUCTS = 'GET_SUPPLIER_PRODUCTS';
+const GET_REPORTS = 'GET_REPORTS';
 
 export const getSuppliers = () => {
     return (dispatch, state) => {
@@ -137,6 +139,25 @@ export const updateQuantity = (supplierId, supplierProductId, data) => {
     }
 }
 
+export const getReports = (startDate, endDate) => {
+    return (dispatch, state) => {
+        let fetchOptions = {
+            method: 'GET',
+            credentials: 'include',
+            mode: 'cors',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            })
+        }
+        fetch(`${API_URL}supplier/report?startDate=${startDate}&endDate=${endDate}`, fetchOptions)
+        .then(response => response.json())
+        .then(response => {
+            dispatch({ type: GET_REPORTS, response })
+        })
+    }
+}
+
 
 
 export function supplier(supplier = initialState, action) {
@@ -145,6 +166,9 @@ export function supplier(supplier = initialState, action) {
             return Object.assign({}, supplier, { list: action.response })
         case GET_SUPPLIER_PRODUCTS: 
             return Object.assign({}, supplier, { supplierProducts: action.response })
+        case GET_REPORTS:
+            console.log(action)
+            return Object.assign({}, supplier, { reports: action.response })
         default:
             return supplier;
     }

@@ -11,6 +11,7 @@ import SupplierDetails from '../ui/supplier-details';
 import Checkout from '../ui/checkout';
 import { ping } from '../redux/modules';
 import { connect } from 'react-redux';
+import Report from '../ui/report';
 class InventoryManagementRouter extends Component {
     constructor(props) {
         super(props)
@@ -33,6 +34,7 @@ class InventoryManagementRouter extends Component {
                         <Route path="/dashboard/brands" component={Brands} onEnter={this.checkSession.bind(this)}/>
                         <Route path="/dashboard/products" component={Products} onEnter={this.checkSession.bind(this)}/>
                         <Route path="/dashboard/checkout" component={Checkout} onEnter={this.checkSession.bind(this)}/>
+                        <Route path="/dashboard/report" component={Report} onEnter={this.checkSession.bind(this)}/>
                     </Route>
                 </Route>
             </Router>
